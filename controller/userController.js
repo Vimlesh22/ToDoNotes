@@ -1,3 +1,18 @@
+/**********************************************************************************************************************
+ *  Purpose         : Handing of the request coming from the clients regarding login,register and forget password.
+ * 
+ *  @description    
+ * 
+ *  @file           : userController.js
+ *  @overview       : UserController class delegates the request from client from signup,login and forgetpassword.
+ *  @author         : Vimlesh Kumar <kumarvimlesh007@gmail.com>
+ *  @version        : 1.0
+ *  @since          : 18-05-2018
+ *
+ **********************************************************************************************************************/
+/**
+*@description loads all the depencies requied for the user controller class including express validator
+*/
 const userService = require('../service/userService');
 const expressValidator = require('express-validator');
 
@@ -5,6 +20,11 @@ function UserController(){
 
 }
 
+/**
+ * @description Prototype property adding the property functions.
+ * 
+ * @method signup() - Registers the new user for ToDoNotes application
+ */
 UserController.prototype.signup = (req,res,next) => {
   var username = req.body.username;
   var email = req.body.email;
@@ -33,7 +53,11 @@ UserController.prototype.signup = (req,res,next) => {
    }
 
 };
-
+/**
+ * @description Prototype property adding the property functions.
+ * 
+ * @method login() - Logins already registered user for ToDoNotes application
+ */
 UserController.prototype.login = (req,res,next) => {
   var email = req.body.email;
   var password = req.body.password;
@@ -60,7 +84,11 @@ UserController.prototype.login = (req,res,next) => {
     });
   }
 };
-
+/**
+ * @description Prototype property adding the property functions.
+ * 
+ * @method forget() - Forget Password method allows user to create a new password incase they forget it using email services
+ */
 UserController.prototype.forget = (req,res,next) => {
   var email = req.body.email;
   req.checkBody('email','Email is Required').notEmpty();
