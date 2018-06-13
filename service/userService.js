@@ -48,7 +48,7 @@ UserService.prototype.loginService = (email,password,callback) => {
 };
 /**
  * @description Prototype property adding the property functions for NoteModel Calss.
- * @method forgetService() - Create a service for creation of notes.
+ * @method forgetService() - service method to send email to user for changing password from link.
  */
 UserService.prototype.forgetService = (email,callback) => {
   userModel.forgetModel(email,(result,err) => {
