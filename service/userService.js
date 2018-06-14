@@ -51,7 +51,7 @@ UserService.prototype.loginService = (email,password,callback) => {
  * @method forgetService() - service method to send email to user for changing password from link.
  */
 UserService.prototype.forgetService = (email,callback) => {
-  userModel.forgetModel(email,(result,err) => {
+  userModel.forgetModel(email,(err,result) => {
     if(err){
       callback(err);
     }else {

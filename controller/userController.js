@@ -14,6 +14,7 @@
 *@description loads all the depencies requied for the user controller class including express validator
 */
 const userService = require('../service/userService');
+const emailService = require('../service/emailService');
 const expressValidator = require('express-validator');
 
 function UserController(){
@@ -63,7 +64,7 @@ UserController.prototype.login = (req,res,next) => {
   var password = req.body.password;
   req.checkBody('email','Email is Required').notEmpty();
   req.checkBody('password','Password is Required').notEmpty();
-  var error = req.validationErrors();
+  var error = req.validationErrors(); 
   if(error)
   {
     res.status(400).send({ "Error": errors });
@@ -91,6 +92,7 @@ UserController.prototype.login = (req,res,next) => {
  */
 UserController.prototype.forget = (req,res,next) => {
   var email = req.body.email;
+  var password = req.body.password;
   req.checkBody('email','Email is Required').notEmpty();
   req.checkBody('password','Password is Required').notEmpty();
   var error = req.validationErrors();
@@ -100,13 +102,13 @@ UserController.prototype.forget = (req,res,next) => {
     return;
   }
   else {
-    userService.loginService(email,password,(err,result) => {
-      if(err){
-        res.status(401).json({
-          message : err
-        })
-      }else{
-        userService.forgetService = (email,(error,result) => {
+    // userService.loginService(email,password,(err,result) => {
+    //   if(err){
+    //     res.status(401).json({
+    //       message : err
+    //     })
+    //   }else{
+        emailService.emailService = (email,(error,result) => {
           if(error){
             res.status(500).json({
               error : error
@@ -117,9 +119,9 @@ UserController.prototype.forget = (req,res,next) => {
             });
           }
         });
-    }
-  });
-}
+     }
+//   });
+// }
 };
 
 module.exports = new UserController();

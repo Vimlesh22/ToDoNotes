@@ -23,8 +23,8 @@ function NotesService(){
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method createNotesService() - Create a service for creation of notes.
  */
-NotesService.prototype.createNotesService = (title,description,email,password,callback) => {
-  model.createNotesModel(title,description,email,password,(err,result) => {
+NotesService.prototype.createNotesService = (notesObject,callback) => {
+  model.createNotesModel(notesObject,(err,result) => {
     if(err){
       callback(err);
     }else {
@@ -36,8 +36,8 @@ NotesService.prototype.createNotesService = (title,description,email,password,ca
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method getNotesService() - service method for getting a note.
  */
-NotesService.prototype.getNotesService = (callback) => {
-  model.getNotesModel((err,result) => {
+NotesService.prototype.getNotesService = (queryObject,callback) => {
+  model.getNotesModel(queryObject,(err,result) => {
     if(err){
        callback(err);
    }else {

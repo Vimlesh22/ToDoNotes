@@ -54,7 +54,6 @@ UserModel.prototype.signupModel = (username,email,password,callback) => {
             callback(err)
           }
           else{
-
             var user = new User({
               username : username,
               email : email,
@@ -64,7 +63,7 @@ UserModel.prototype.signupModel = (username,email,password,callback) => {
             user.save()
             .then((result) => {
                 callback(null,result)
-            },(err)=>{
+            },(err) => {
                 callback(err)
             });
           }
@@ -79,21 +78,24 @@ UserModel.prototype.signupModel = (username,email,password,callback) => {
  */
 UserModel.prototype.loginModel = (email,password,callback) => {
   User.findOne({ email : email})
-  .then((result,err) => {
+  .then((result) => {
+    // console.log(JSON.stringify(result));
     if(err){
       callback(err);
     }if(result === null){
       callback('User Doesn\'t Exist');
     }
     else if(result){
+      var _id = result._id;
       bcrypt.compare(password,result.password,(error,result1) => {
         if(error){
           callback(error);
         }
         if(result1){
           const token = jwt.sign({
+            _id : _id,
             email : email,
-          },config.secret,{
+          },config.secret,{+36
             expiresIn : "1h"
           })
           callback(null,token);
@@ -111,16 +113,17 @@ UserModel.prototype.loginModel = (email,password,callback) => {
  */
 UserModel.prototype.forgetModel = function (email,callback) {
   Note.find({ email : email })
-  .then((result,err) => {
+  .then((result,error) => {
     if(error){
       callback(error);
     }else {
-
       emailService.emailService((error,sucess) => {
         if(error){
-          console.log("error");
+          callback(error);
+          // console.log("error");
         }else {
-          console.log("success");
+          callback(null,'email sent ')
+          // console.log("success");
         }
       });
       callback(null,result);

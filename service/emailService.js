@@ -4,7 +4,7 @@
  *  @description
  *
  *  @file           : emailService.js
- *  @overview       : Creating transporter for sending email.
+ *  @overview       : Creating transporter and helper method for sending email.
  *  @author         : Vimlesh Kumar <kumarvimlesh007@gmail.com>
  *  @version        : 1.0
  *  @since          : 17-05-2018
@@ -14,9 +14,11 @@
  * @description Dependencies require to be installed before the execution of this file.
  * @var {Class} nodemailer class instance of the nodemailer.
  * @var {Class} config class instance
+ * @var {Class} tokenGenerator class instance of token-generator
  */
 const config = require ('../secret/config');
 const nodemailer = require('nodemailer');
+const tokenGenerator = require('token-generator');
 
 function EmailService() {
 
@@ -36,8 +38,8 @@ var transporter = nodemailer.createTransport({
  * @method emailService() - Create a method to whom email is to sent after user clicking on forget password link.
  */
 EmailService.prototype.emailService = (email,callback) => {
-  var TOKEN = generateToken(user);
-  var forgotURL = BASE_URL + '/forgetpassword?token=' + TOKEN
+  var TOKEN = tokenGenerator.generate();
+  var forgotURL = config.BASE_URL + '/forgetpassword?token=' + TOKEN;
   var helperOptions = {
     from : 'Vimlesh Kumar <kumarvimlesh007@gmail.com>',
     to : email,

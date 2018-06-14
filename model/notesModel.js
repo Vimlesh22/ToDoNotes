@@ -16,12 +16,14 @@
  * @var {Class} config class instance
  */
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const config = require ('../secret/config');
 
 /**
 * @description creating noteSchema for notes
 */
 var noteSchema = mongoose.Schema({
+  userID : {type : String },
   title : { type : String,required : true,unique : true },
   description : { type : String,required : true }
 });
@@ -35,11 +37,16 @@ function NoteModel() {
 /**
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method createNotesModel() - Create a note object and stores notes description in database.
+ * var mongoose = require('mongoose');
+ * var id = mongoose.Types.ObjectId('4edd40c86762e0fb12000003');
  */
-NoteModel.prototype.createNotesModel = function (title,description,callback) {
+
+NoteModel.prototype.createNotesModel = function (notesObject,callback) {
+  //console.log(JSON.stringify(notesObject));
   var note = new Note({
-    title : title,
-    description : description,
+    userID : notesObject._id,
+    title : notesObject.title,
+    description : notesObject.description,
   });
   note.save()
   .then((result,err) => {
@@ -55,8 +62,9 @@ NoteModel.prototype.createNotesModel = function (title,description,callback) {
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method getNotesModel() - gets all the notes for particular user from database.
  */
-NoteModel.prototype.getNotesModel = function (callback) {
-  Note.find()
+NoteModel.prototype.getNotesModel = function (queryObject,callback) {
+  // console.log(queryObject);
+  Note.find(queryObject)
   .then((result,err) => {
     if(err){
       callback(err);
@@ -71,11 +79,11 @@ NoteModel.prototype.getNotesModel = function (callback) {
  * @method deleteNoteModel() - delete the note for particular user using id from the database.
  */
 NoteModel.prototype.deleteNoteModel = (id,callback) => {
-  Note.deleteOne(id).then((result,err) => {
+  Note.deleteOne({_id: id}).then((result,err) => {
     if(err){
       callback(err);
     }else {
-      callback(null,result);
+      callback(null,"Notes Deleted Successfully");
     }
   });
 };
@@ -85,7 +93,8 @@ NoteModel.prototype.deleteNoteModel = (id,callback) => {
  * @method updateNoteModel() - update the note for particular user using id and setting the fields to be updated from the database.
  */
 NoteModel.prototype.updateNoteModel = (id,title,callback) => {
-  Note.update({id : id},{ $set : { title : title } })
+  // Note.find({ _id : id }).then(callback.bind(null,null))
+  Note.update({_id : id},{ title : title } )
   .then((result,err) => {
     if(err){
       callback(err)

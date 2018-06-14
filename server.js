@@ -20,6 +20,30 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api',routes);
 
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+      res.status(404).json({
+        message: err.message,
+        success : false
+      })
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  console.log("hhhh",err);
+    res.status(err.status || 500);
+
+          res.status(404).json({
+            message: err.message,
+            success : false
+          })
+});
+
 app.listen(PORT, () => {
   model.createConnection();
   console.log('Listening on Port'+PORT);

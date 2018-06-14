@@ -24,18 +24,30 @@ function AuthController() {
  * @method jwt_token_filter() - Verifies the token provided by the user and passes the control to next middleware
  */
 AuthController.prototype.jwt_token_filter =  (req,res,next) => {
-if(!req.headers.authorization && ( req.url.indexOf("login") === -1 && req.url.indexOf("signup") === -1 )){
-  var token = req.body.token || req.headers['x-access-token'];
-  try{
-  var encode = jwt.verify(token,config.secret);
-  }catch(error)
-  {
-    res.send({
-      error : error
-    });
+  if(req.url.indexOf("login") === -1 && req.url.indexOf("signup") === -1){
+    try{
+      if(!req.headers.authorization){
+        throw new Error('Token not provided');
+      }else {
+        var token = req.body.token || req.headers['authorization'];
+        if(token === undefined ){
+          throw new Error('Token undefined');
+        }else if(token.length === 0){
+          throw new Error('Token is empty');
+        }
+        var decoded = jwt.verify(token,config.secret,function(err, result) {
+          var auth = {
+            _id : result._id,
+          };
+          req.user = auth ;
+        });
+      }
+    }catch(error)
+    {
+      return next(error);
+    }
   }
-}
-next();
+  return next();
 };
 
 module.exports = new AuthController();
