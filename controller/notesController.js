@@ -98,7 +98,11 @@ NotesController.prototype.updateNote = (req,res,next) => {
 
 /**
  * @description Prototype property adding the property functions.
+<<<<<<< HEAD
  *
+=======
+ *
+>>>>>>> eb1ac88e447c72f39989ebabc87368b55da1e252
  * @method deleteNote() - Deletes a note of particular user.
  */
 NotesController.prototype.deleteNote = (req,res,next) => {
