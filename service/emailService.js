@@ -18,7 +18,11 @@
  */
 const config = require ('../secret/config');
 const nodemailer = require('nodemailer');
-const tokenGenerator = require('token-generator');
+
+var TokenGenerator = require( 'token-generator' )({
+       salt: config.secret,
+       timestampMap: 'abcdefghij', // 10 chars array for obfuscation proposes
+   });
 
 function EmailService() {
 
@@ -38,15 +42,14 @@ var transporter = nodemailer.createTransport({
  * @method emailService() - Create a method to whom email is to sent after user clicking on forget password link.
  */
 EmailService.prototype.emailService = (email,callback) => {
-  var TOKEN = tokenGenerator.generate();
-  var forgotURL = config.BASE_URL + '/forgetpassword?token=' + TOKEN;
+  var token = TokenGenerator.generate();
+  var forgotURL = config.BASE_URL + 'api/forgetpassword?token=' + token;
   var helperOptions = {
     from : 'Vimlesh Kumar <kumarvimlesh007@gmail.com>',
     to : email,
     subject : 'Please confirm your email address',
     html : 'Please click the link to confirm your email.<a href="'+forgotURL+'">click</a>'
   }
-
   transporter.sendMail(helperOptions,(error,success) => {
     if(error){
       callback(error);

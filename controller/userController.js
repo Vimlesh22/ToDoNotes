@@ -64,7 +64,7 @@ UserController.prototype.login = (req,res,next) => {
   var password = req.body.password;
   req.checkBody('email','Email is Required').notEmpty();
   req.checkBody('password','Password is Required').notEmpty();
-  var error = req.validationErrors(); 
+  var error = req.validationErrors();
   if(error)
   {
     res.status(400).send({ "Error": errors });
@@ -98,7 +98,7 @@ UserController.prototype.forget = (req,res,next) => {
   var error = req.validationErrors();
   if(error)
   {
-    res.status(400).send({ "Error" : errors });
+    res.status(400).send({ "Error" : error });
     return;
   }
   else {
@@ -108,17 +108,17 @@ UserController.prototype.forget = (req,res,next) => {
     //       message : err
     //     })
     //   }else{
-        emailService.emailService = (email,(error,result) => {
-          if(error){
-            res.status(500).json({
-              error : error
-            });
-          }else {
-            res.status(200).json({
-              result : result
-            });
-          }
+    emailService.emailService(email,(error,result) => {
+      if(error){
+        res.status(500).json({
+          error : error
         });
+      }else {
+        res.status(200).json({
+          result : result
+        });
+      }
+    });
      }
 //   });
 // }

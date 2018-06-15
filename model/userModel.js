@@ -38,6 +38,23 @@ var userSchema = mongoose.Schema({
   password : { type : String,required : true }
 });
 
+// userSchema.pre('save', function(next) {
+//   var user = this;
+//   var SALT_FACTOR = 5;
+//
+//   if (!user.isModified('password')) return next();
+//
+//   bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+//     if (err) return next(err);
+//
+//     bcrypt.hash(user.password, salt, null, function(err, hash) {
+//       if (err) return next(err);
+//       user.password = hash;
+//       next();
+//     });
+//   });
+// });
+
 var User = mongoose.model('Users',userSchema);
 
 /**
@@ -78,7 +95,7 @@ UserModel.prototype.signupModel = (username,email,password,callback) => {
  */
 UserModel.prototype.loginModel = (email,password,callback) => {
   User.findOne({ email : email})
-  .then((result) => {
+  .then((result,err) => {
     // console.log(JSON.stringify(result));
     if(err){
       callback(err);
@@ -95,7 +112,7 @@ UserModel.prototype.loginModel = (email,password,callback) => {
           const token = jwt.sign({
             _id : _id,
             email : email,
-          },config.secret,{+36
+          },config.secret,{
             expiresIn : "1h"
           })
           callback(null,token);
@@ -107,28 +124,5 @@ UserModel.prototype.loginModel = (email,password,callback) => {
   });
 };
 
-/**
- * @description Prototype property adding the property functions for UserModel Calss.
- * @method forgetModel() - Creates new password for a user already exists .
- */
-UserModel.prototype.forgetModel = function (email,callback) {
-  Note.find({ email : email })
-  .then((result,error) => {
-    if(error){
-      callback(error);
-    }else {
-      emailService.emailService((error,sucess) => {
-        if(error){
-          callback(error);
-          // console.log("error");
-        }else {
-          callback(null,'email sent ')
-          // console.log("success");
-        }
-      });
-      callback(null,result);
-    }
-  });
-};
 
 module.exports = new UserModel();

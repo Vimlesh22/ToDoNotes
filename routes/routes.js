@@ -15,6 +15,7 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', { failur
 
 router.post('/login' , userController.login);
 router.post('/signup' , userController.signup);
+router.post('/forgetpassword',userController.forget);
 
 router.use(authController.jwt_token_filter);
 
@@ -22,6 +23,5 @@ router.post('/createNote',notesController.createNote);
 router.patch('/updateNote',notesController.updateNote);
 router.get('/getNote',notesController.getNote);
 router.delete('/deleteNote',notesController.deleteNote);
-router.post('/forgetpassword',userController.forget);
 
 module.exports = router;
