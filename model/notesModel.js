@@ -18,6 +18,8 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 const config = require ('../secret/config');
+const redis = require('redis');
+const REDIS_PORT = process.env.REDIS_PORT;
 
 /**
 * @description creating noteSchema for notes

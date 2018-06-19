@@ -1,0 +1,17 @@
+{
+  "database" : {
+    "databaseURL" : "mongodb://localhost:27017/ToDoNote",
+    "BASE_URL" : "http://localhost:3030/"
+  },
+  "facebook" : {
+    "clientID" : "256212698272810",
+    "clientSecret" : "8d1b81432acf5e5533ace169f831308b",
+  },
+  "gmail" : {
+    "email" : "kumarvimlesh007@gmail.com",
+    "password" : "vimleshd",
+  },
+  "secret" : {
+    "secret" : "thisismysecret"
+  }
+}

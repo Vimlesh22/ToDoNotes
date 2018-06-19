@@ -17,6 +17,31 @@ const userService = require('../service/userService');
 const emailService = require('../service/emailService');
 const expressValidator = require('express-validator');
 
+// var result = {
+//   "success" : true,
+//   "message": "Retriving the notes list",
+//   "data": [{
+//     "_id": "sdafsdfsfgsd",
+//     "title": "notes title",
+//     "desc":"asdjasbdasd bhsjasdkasd"
+//     "isArchived":true,
+//     "labels":["red", "top", "feature"],
+//     "isPinned":false
+//   },{
+//     "_id": "sdafsdfsfgsd",
+//     "title": "notes title",
+//     "desc":"asdjasbdasd bhsjasdkasd"
+//     "isArchived":true,
+//     "labels":["red", "top", "feature"],
+//     "isPinned":false
+//   }]
+// }
+//
+// var failed = {
+//   "success" : false,
+//   "message": "Failed to send email. Please try again."
+// }
+
 function UserController(){
 
 }
@@ -102,14 +127,9 @@ UserController.prototype.forget = (req,res,next) => {
     return;
   }
   else {
-    // userService.loginService(email,password,(err,result) => {
-    //   if(err){
-    //     res.status(401).json({
-    //       message : err
-    //     })
-    //   }else{
     emailService.emailService(email,(error,result) => {
       if(error){
+        console.log(JSON.stringify(error))
         res.status(500).json({
           error : error
         });
