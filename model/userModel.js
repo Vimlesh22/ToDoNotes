@@ -117,7 +117,7 @@ UserModel.prototype.loginModel = (email,password,callback) => {
           })
           callback(null,token);
         }else {
-          callback(error)
+          callback("password is incorrect");
         }
       })
     }

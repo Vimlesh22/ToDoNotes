@@ -29,7 +29,7 @@ var expressValidator = require('express-validator');
 const bodyParser = require('body-parser');
 const routes = require('./routes/routes');
 const model = require('./model/connection');
-
+const passport = require("./passport/passport-facebook");
 const app = express();
 /**
  * @description Constant Variable is declared to use to define PORT number for the connection.
