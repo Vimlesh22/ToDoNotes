@@ -18,22 +18,27 @@
  */
 const config = require ('../secret/config');
 const nodemailer = require('nodemailer');
+const XOAuth2 = require('xoauth2');
+var smtpTransport = require('nodemailer-smtp-transport');
 
 var TokenGenerator = require( 'token-generator' )({
        salt: config.secret,
-       timestampMap: 'abcdefghij', // 10 chars array for obfuscation proposes
+       timestampMap: 'abcdefghij',
    });
 
 function EmailService() {
 
 };
-
-var transporter = nodemailer.createTransport({
-  service : 'Gmail',
-  secure : false,
-  auth : {
-    user : config.email,
-    pass : config.password
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    type: 'OAuth2',
+    user: "kumarvimlesh007@gmail.com",
+    clientId: "782825772780-jv4f6s2me8vp34cckq6lrm2jfpglch3p.apps.googleusercontent.com",
+    clientSecret: "DQix2f0jhHHL_y1-BbAvN6YE",
+    refreshToken: "1/j9OhxTCavS85bsoxAXPo9OB3a-lK9Jp_TFBOKSNoS_o",
   }
 });
 
@@ -41,7 +46,7 @@ var transporter = nodemailer.createTransport({
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method emailService() - Create a method to whom email is to sent after user clicking on forget password link.
  */
-EmailService.prototype.emailService = (email,callback) => {
+EmailService.prototype.emailService = async (email,callback) => {
   var token = TokenGenerator.generate();
   var forgotURL = config.BASE_URL + 'api/forgetpassword?token=' + token;
   var helperOptions = {
@@ -50,13 +55,7 @@ EmailService.prototype.emailService = (email,callback) => {
     subject : 'Please confirm your email address',
     html : 'Please click the link to confirm your email.<a href="'+forgotURL+'">click</a>'
   }
-  transporter.sendMail(helperOptions,(error,success) => {
-    if(error){
-      callback(error);
-    }else {
-      callback(sucess);
-    }
-  });
+  await transporter.sendMail(helperOptions, callback);
 };
 
 module.exports = new EmailService();

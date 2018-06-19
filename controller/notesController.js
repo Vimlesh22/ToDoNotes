@@ -45,6 +45,7 @@ NotesController.prototype.createNote = (req,res,next) => {
     }else{
       res.status(200).json({
         Note : result
+
       });
     }
   });
@@ -60,7 +61,6 @@ NotesController.prototype.getNote = (req,res,next) => {
   var noteQueryObj = {
     userID : req.user._id
   }
-  console.log(JSON.stringify(noteQueryObj));
   notesService.getNotesService(noteQueryObj,(err,result) => {
     if(err){
       res.status(500).json({
@@ -80,7 +80,6 @@ NotesController.prototype.getNote = (req,res,next) => {
  * @method updateNote() - Update the notes.
  */
 NotesController.prototype.updateNote = (req,res,next) => {
-  // var id = req.user._id;
   var id = req.body.id;
   var title = req.body.title;
   notesService.updateNoteService(id,title,(err,result) => {
