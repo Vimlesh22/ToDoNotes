@@ -55,6 +55,11 @@ UserController.prototype.signup = (req,res,next) => {
   var username = req.body.username;
   var email = req.body.email;
   var password = req.body.password;
+  var signupObject = {
+    username : username,
+    email : email,
+    password :password
+  }
   req.checkBody('username', 'username is required.').notEmpty();
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is must be a valid email').isEmail();
@@ -65,7 +70,7 @@ UserController.prototype.signup = (req,res,next) => {
      return;
    }
    else {
-          userService.signupService(username,email,password,(err,result) => {
+          userService.signupService(signupObject,(err,result) => {
            if(err){
              res.status(500).json({
                error : err

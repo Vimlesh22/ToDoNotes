@@ -16,6 +16,7 @@
  */
 const jwt = require('jsonwebtoken');
 const config = require ('../secret/config');
+
 function AuthController() {
 
 }

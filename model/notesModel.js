@@ -46,7 +46,7 @@ function NoteModel() {
 NoteModel.prototype.createNotesModel = function (notesObject,callback) {
   //console.log(JSON.stringify(notesObject));
   var note = new Note({
-    userID : notesObject._id,
+    userID : notesObject.userID,
     title : notesObject.title,
     description : notesObject.description,
   });

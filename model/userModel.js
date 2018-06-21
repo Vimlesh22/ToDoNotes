@@ -61,7 +61,10 @@ var User = mongoose.model('Users',userSchema);
  * @description Prototype property adding the property functions for UserModel Calss.
  * @method signupModel() - SignUp a new User .
  */
-UserModel.prototype.signupModel = (username,email,password,callback) => {
+UserModel.prototype.signupModel = (signupObject,callback) => {
+  var email = signupObject.email;
+  var password  = signupObject.password;
+  var username = signupObject.username;
  User.find({email : email}).then((user,err) => {
       if(user.length >= 1){
         callback('User already exists!!!!!....Create a new user');
@@ -76,7 +79,6 @@ UserModel.prototype.signupModel = (username,email,password,callback) => {
               email : email,
               password : hash
             });
-
             user.save()
             .then((result) => {
                 callback(null,result)

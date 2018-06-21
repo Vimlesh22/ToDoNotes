@@ -24,8 +24,8 @@ function UserService() {
  * @description Prototype property adding the property functions for NoteModel Calss.
  * @method signupService() - service for signup user.
  */
-UserService.prototype.signupService = (userName,email,password,callback) => {
-  userModel.signupModel(userName,email,password,(err,result) => {
+UserService.prototype.signupService = (signupObject,callback) => {
+  userModel.signupModel(signupObject,(err,result) => {
     if(err){
       callback(err);
     }else {

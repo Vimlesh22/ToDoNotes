@@ -13,7 +13,6 @@
  *  @since          : 17-05-2018
  *
  ******************************************************************************/
-
 /**
  * @description Dependencies require to be installed before the execution of this file.
  * @var {Class} express class instance of the express
@@ -22,6 +21,7 @@
  * @var {Class} bodyParser class instance of the body-parser
  * @var {Class} expressValidator class instance of the express-validator
  */
+
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -31,6 +31,8 @@ const routes = require('./routes/routes');
 const model = require('./model/connection');
 const passport = require("./passport/passport-facebook");
 const app = express();
+const logger = require("./lib/logger");
+
 /**
  * @description Constant Variable is declared to use to define PORT number for the connection.
  * @var {integer} PORT
@@ -40,6 +42,7 @@ const PORT = process.env.PORT || 3030 ;
  * @description middleware added to support cross origin platform sharing.
  */
 app.use(cors());
+
 /**
  * @description middleware added to parse the data coming from url request.
  */
@@ -55,12 +58,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api',routes);
 
-// development error handler
-// will print stacktrace
+app.use(function(req, res, next) {
+  logger.error(err);
+    res.status(404).json({
+      message: "No such Url or method",
+      success : false
+    })
+});
+
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-      res.status(404).json({
+      res.json({
         message: err.message,
         success : false
       })
@@ -70,16 +79,16 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  console.log("hhhh",err);
+  logger.error(err);
     res.status(err.status || 500);
-
-          res.status(404).json({
-            message: err.message,
-            success : false
-          })
+    res.json({
+      message: err.message,
+      success : false
+    });
 });
 
 app.listen(PORT, () => {
   model.createConnection();
+  logger.info('Listening on Port '+PORT);
   console.log('Listening on Port '+PORT);
 });

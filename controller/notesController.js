@@ -34,9 +34,8 @@ NotesController.prototype.createNote = (req,res,next) => {
   var notesObject = {
     title : title,
     description : description,
-    _id : _id
+    userID : _id
   };
-  // console.log(JSON.stringify(notesObject));
   notesService.createNotesService(notesObject,(err,result) => {
     if(err) {
       res.status(500).json({
@@ -45,7 +44,6 @@ NotesController.prototype.createNote = (req,res,next) => {
     }else{
       res.status(200).json({
         Note : result
-
       });
     }
   });
